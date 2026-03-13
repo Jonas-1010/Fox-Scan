@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fox Scan Pro - مشروع التخرج</title>
+    <style>
+        body { margin: 0; background: #0b0b0b; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: #1a1a1a; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(255,106,0,0.2); width: 320px; text-align: center; border: 1px solid #333; }
+        h1 { color: #ff6a00; font-size: 26px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #000; color: white; margin-bottom: 15px; box-sizing: border-box; text-align: center; font-size: 14px; }
+        button { width: 100%; padding: 12px; border-radius: 10px; border: none; background: #ff6a00; color: white; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:active { transform: scale(0.98); background: #e65c00; }
+        
+        /* مؤشر القياس */
+        .gauge-area { position: relative; width: 220px; height: 110px; margin: 30px auto 10px; overflow: hidden; }
+        .gauge-body { width: 220px; height: 220px; border-radius: 50%; background: conic-gradient(from -90deg, #ff4444 0%, #ffcc00 50%, #00ff88 100%); mask: radial-gradient(circle at 50% 50%, transparent 68%, black 70%); -webkit-mask: radial-gradient(circle at 50% 50%, transparent 68%, black 70%); }
+        .needle { position: absolute; bottom: 0; left: 50%; width: 4px; height: 90px; background: #fff; transform-origin: bottom center; transform: rotate(-90deg); transition: 1.5s cubic-bezier(0.17, 0.67, 0.46, 1.2); border-radius: 5px; z-index: 10; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .needle-center { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; z-index: 11; }
+        .status { margin-top: 15px; font-size: 22px; font-weight: bold; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🦊 Fox Scan Pro</h1>
+    <input type="text" id="urlInput" placeholder="أدخل الرابط للفحص...">
+    <button onclick="performScan()">فحص الأمان</button>
+    
+    <div class="gauge-area">
+        <div class="gauge-body"></div>
+        <div id="needle" class="needle"></div>
+        <div class="needle-center"></div>
+    </div>
+    
+    <div id="statusResult" class="status">جاهز</div>
+</div>
+
+<script>
+function performScan() {
+    const url = document.getElementById('urlInput').value.trim();
+    const needle = document.getElementById('needle');
+    const statusText = document.getElementById('statusResult');
+    
+    if(!url) { alert("يرجى وضع رابط أولاً!"); return; }
+
+    let score = 50; // افتراضي (منتصف)
+    const secureSites = ["google.com", "microsoft.com", "github.com", "apple.com", "youtube.com", "facebook.com"];
+    const riskyTerms = ["login", "free", "gift", "win", "verify", "bonus", "prize", "account-update"];
+
+    // تحليل الرابط
+    if (secureSites.some(site => url.toLowerCase().includes(site)) && url.startsWith("https")) {
+        score = 92; // آمن جداً (أخضر - يمين)
+    } else if (riskyTerms.some(term => url.toLowerCase().includes(term)) || !url.startsWith("https")) {
+        score = 8;  // خطر جداً (أحمر - يسار)
+    } else {
+        score = 50; // مشبوه (أصفر - منتصف)
+    }
+
+    // حركة الإبرة: من -90 (أحمر) إلى 90 (أخضر)
+    const finalAngle = (score / 100) * 180 - 90;
+    needle.style.transform = `rotate(${finalAngle}deg)`;
+
+    // تحديث الحالة والألوان
+    if(score > 70) {
+        statusText.innerText = "آمن ✅";
+        statusText.style.color = "#00ff88";
+    } else if(score < 40) {
+        statusText.innerText = "خطر ❌";
+        statusText.style.color = "#ff4444";
+    } else {
+        statusText.innerText = "مشبوه ⚠️";
+        statusText.style.color = "#ffcc00";
+    }
+}
+</script>
+
+</body>
+</html>
