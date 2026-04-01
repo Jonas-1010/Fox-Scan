@@ -2,78 +2,295 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fox Scan Pro - مشروع التخرج</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Fox Scan Pro - نظام تحليل الروابط الذكي</title>
     <style>
-        body { margin: 0; background: #0b0b0b; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .card { background: #1a1a1a; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(255,106,0,0.2); width: 320px; text-align: center; border: 1px solid #333; }
-        h1 { color: #ff6a00; font-size: 26px; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #000; color: white; margin-bottom: 15px; box-sizing: border-box; text-align: center; font-size: 14px; }
-        button { width: 100%; padding: 12px; border-radius: 10px; border: none; background: #ff6a00; color: white; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        button:active { transform: scale(0.98); background: #e65c00; }
-        
-        /* مؤشر القياس */
-        .gauge-area { position: relative; width: 220px; height: 110px; margin: 30px auto 10px; overflow: hidden; }
-        .gauge-body { width: 220px; height: 220px; border-radius: 50%; background: conic-gradient(from -90deg, #ff4444 0%, #ffcc00 50%, #00ff88 100%); mask: radial-gradient(circle at 50% 50%, transparent 68%, black 70%); -webkit-mask: radial-gradient(circle at 50% 50%, transparent 68%, black 70%); }
-        .needle { position: absolute; bottom: 0; left: 50%; width: 4px; height: 90px; background: #fff; transform-origin: bottom center; transform: rotate(-90deg); transition: 1.5s cubic-bezier(0.17, 0.67, 0.46, 1.2); border-radius: 5px; z-index: 10; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        .needle-center { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; z-index: 11; }
-        .status { margin-top: 15px; font-size: 22px; font-weight: bold; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: radial-gradient(circle at 20% 30%, #0a0f1a, #030507);
+            color: #eef4ff;
+            font-family: 'Segoe UI', Tahoma, system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(18, 22, 35, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 28px 22px 35px;
+            border-radius: 48px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,106,0,0.25);
+            width: 380px;
+            max-width: 95%;
+            text-align: center;
+            border: 1px solid rgba(255,106,0,0.3);
+        }
+        h1 { color: #ff8c42; font-size: 28px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .sub { font-size: 13px; color: #9aa4bf; margin-bottom: 25px; border-bottom: 1px dashed #2a2f3f; display: inline-block; padding-bottom: 6px; }
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 60px;
+            border: 1px solid #2e3a4e;
+            background: #0c0f17;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 15px;
+            text-align: left;
+            font-family: monospace;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(95deg, #ff6a00, #ff9430);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 17px;
+            box-shadow: 0 5px 12px rgba(255,106,0,0.3);
+        }
+        button:active { transform: scale(0.97); }
+        .gauge-container {
+            margin: 25px auto 15px;
+            position: relative;
+            width: 240px;
+            height: 120px;
+            overflow: visible;
+        }
+        .gauge-bg {
+            position: relative;
+            width: 240px;
+            height: 120px;
+            overflow: hidden;
+        }
+        .gauge-circle {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: conic-gradient(from -90deg, #e34d4d 0%, #f5b042 45%, #3ecf8e 100%);
+            mask: radial-gradient(circle at 50% 50%, transparent 68%, black 70%);
+            -webkit-mask: radial-gradient(circle at 50% 50%, transparent 68%, black 70%);
+        }
+        .needle {
+            position: absolute;
+            bottom: 0px;
+            left: 50%;
+            width: 4px;
+            height: 95px;
+            background: linear-gradient(180deg, #ffdd99, #ffffff);
+            transform-origin: bottom center;
+            transform: rotate(-90deg);
+            transition: 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border-radius: 6px;
+            z-index: 12;
+            box-shadow: 0 0 8px rgba(255,220,100,0.8);
+        }
+        .needle-center {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #ffd966, #ffaa33);
+            border-radius: 50%;
+            z-index: 13;
+            box-shadow: 0 0 6px orange;
+            border: 1px solid #ffb347;
+        }
+        .markers {
+            display: flex;
+            justify-content: space-between;
+            width: 240px;
+            margin: 8px auto 0;
+            font-size: 11px;
+            font-weight: bold;
+            color: #ccd6f0;
+            padding: 0 8px;
+        }
+        .status {
+            margin-top: 18px;
+            font-size: 26px;
+            font-weight: 800;
+            background: rgba(0,0,0,0.4);
+            padding: 8px 12px;
+            border-radius: 80px;
+            backdrop-filter: blur(4px);
+        }
+        .extra-detail {
+            font-size: 12px;
+            margin-top: 14px;
+            color: #a0a9c2;
+            background: #0b0e16b3;
+            padding: 6px 12px;
+            border-radius: 32px;
+            display: inline-block;
+        }
+        .legend {
+            font-size: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            color: #8892b0;
+        }
+        footer { font-size: 10px; margin-top: 18px; opacity: 0.6; }
     </style>
 </head>
 <body>
-
 <div class="card">
-    <h1>🦊 Fox Scan Pro</h1>
-    <input type="text" id="urlInput" placeholder="أدخل الرابط للفحص...">
-    <button onclick="performScan()">فحص الأمان</button>
-    
-    <div class="gauge-area">
-        <div class="gauge-body"></div>
-        <div id="needle" class="needle"></div>
-        <div class="needle-center"></div>
+    <h1><span>🦊</span> Fox Scan Pro</h1>
+    <div class="sub">محرر تحليل الروابط الذكي</div>
+    <input type="text" id="urlInput" placeholder="أدخل الرابط للفحص..." dir="ltr">
+    <button onclick="performScan()">🔍 فحص الأمان المتقدم</button>
+    <div class="gauge-container">
+        <div class="gauge-bg">
+            <div class="gauge-circle"></div>
+            <div id="needle" class="needle"></div>
+            <div class="needle-center"></div>
+        </div>
+        <div class="markers">
+            <span>⚠️ خطر</span>
+            <span>⚡ مشبوه</span>
+            <span>✅ آمن</span>
+        </div>
     </div>
-    
-    <div id="statusResult" class="status">جاهز</div>
+    <div id="statusResult" class="status">📡 انتظر الفحص</div>
+    <div id="detailsHint" class="extra-detail">💡 خوارزمية متوازنة تعتمد على 15 معيار أمان</div>
+    <div class="legend">
+        <span>🔒 HTTPS</span> <span>🌐 نطاق موثوق</span> <span>🚫 كلمات خطيرة</span> <span>🧩 امتدادات مشبوهة</span>
+    </div>
+    <footer>تصنيف ثلاثي: آمن / مشبوه / خطر - نتائج أقرب للواقع</footer>
 </div>
 
 <script>
-function performScan() {
-    const url = document.getElementById('urlInput').value.trim();
-    const needle = document.getElementById('needle');
-    const statusText = document.getElementById('statusResult');
-    
-    if(!url) { alert("يرجى وضع رابط أولاً!"); return; }
+    const TRUSTED_DOMAINS = new Set([
+        "google.com", "youtube.com", "facebook.com", "twitter.com", "instagram.com", "linkedin.com",
+        "microsoft.com", "apple.com", "amazon.com", "netflix.com", "spotify.com", "github.com",
+        "wikipedia.org", "stackoverflow.com", "adobe.com", "oracle.com", "cloudflare.com",
+        "whatsapp.com", "telegram.org", "zoom.us", "dropbox.com", "paypal.com", "stripe.com",
+        "shopify.com", "wordpress.com", "medium.com", "bbc.com", "cnn.com", "mit.edu", "stanford.edu"
+    ]);
+    const SUSPICIOUS_TLDS = new Set([
+        "xyz", "top", "tk", "ml", "ga", "cf", "click", "loan", "gq", "men", "icu", "online", 
+        "site", "website", "press", "work", "date", "download", "review", "trade", "bid"
+    ]);
+    const RISKY_KEYWORDS = [
+        "login", "verify", "secure", "account-update", "signin", "confirm", "banking", "wallet",
+        "password-reset", "unlock", "security-check", "validate", "authenticate", "2fa",
+        "gift", "prize", "winner", "free-money", "bonus", "reward", "claim", "congratulations",
+        "urgent", "alert", "notice", "billing-update", "payment-required"
+    ];
+    const PATH_SUSPICIOUS = [
+        "cgi-bin", "wp-admin", "admin", "backdoor", "login.php", "signin.aspx", "confirm.php",
+        "verify.asp", "auth", "credentials", "bank", "paypal"
+    ];
 
-    let score = 50; // افتراضي (منتصف)
-    const secureSites = ["google.com", "microsoft.com", "github.com", "apple.com", "youtube.com", "facebook.com"];
-    const riskyTerms = ["login", "free", "gift", "win", "verify", "bonus", "prize", "account-update"];
-
-    // تحليل الرابط
-    if (secureSites.some(site => url.toLowerCase().includes(site)) && url.startsWith("https")) {
-        score = 92; // آمن جداً (أخضر - يمين)
-    } else if (riskyTerms.some(term => url.toLowerCase().includes(term)) || !url.startsWith("https")) {
-        score = 8;  // خطر جداً (أحمر - يسار)
-    } else {
-        score = 50; // مشبوه (أصفر - منتصف)
+    function analyzeUrlSecurity(urlString) {
+        if (!urlString || urlString.trim() === "") {
+            return { score: 20, verdict: "خطر ❌", finalStatus: "خطر", statusColor: "#ff6b6b", reasonSummary: "رابط فارغ غير صالح" };
+        }
+        let rawUrl = urlString.trim();
+        let urlObj = null;
+        let protocol = "", hostname = "", pathname = "";
+        try {
+            if (!rawUrl.startsWith("http://") && !rawUrl.startsWith("https://")) rawUrl = "https://" + rawUrl;
+            urlObj = new URL(rawUrl);
+            protocol = urlObj.protocol;
+            hostname = urlObj.hostname.toLowerCase();
+            pathname = urlObj.pathname.toLowerCase() + urlObj.search.toLowerCase();
+        } catch (e) {
+            return { score: 18, verdict: "خطر ❌", finalStatus: "خطر", statusColor: "#ff6b6b", reasonSummary: "تنسيق رابط غير صالح" };
+        }
+        let score = 55;
+        let reasons = [];
+        if (protocol === "https:") { score += 12; reasons.push("🔒 HTTPS مشفر"); }
+        else { score -= 18; reasons.push("⚠️ غير مشفر (HTTP)"); }
+        let isTrustedExact = false;
+        for (let trusted of TRUSTED_DOMAINS) {
+            if (hostname === trusted || hostname.endsWith("." + trusted)) { isTrustedExact = true; break; }
+        }
+        if (isTrustedExact) { score += 25; reasons.push("✅ نطاق رئيسي موثوق"); }
+        const domainLength = hostname.length;
+        if (domainLength > 40 && !isTrustedExact) { score -= 8; reasons.push("📏 نطاق طويل جداً"); }
+        else if (domainLength > 55) { score -= 15; reasons.push("🚨 نطاق مفرط الطول"); }
+        const isIpAddress = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname);
+        if (isIpAddress) { score -= 25; reasons.push("🖥️ رابط IP مباشر"); }
+        const dotCount = (hostname.match(/\./g) || []).length;
+        if (dotCount >= 4 && !isTrustedExact) { score -= 8; reasons.push("🧩 نطاقات فرعية كثيرة"); }
+        else if (dotCount >= 6) { score -= 14; reasons.push("⚠️ هيكل نطاق معقد"); }
+        const tld = hostname.split('.').pop();
+        if (SUSPICIOUS_TLDS.has(tld) && !isTrustedExact) { score -= 12; reasons.push(`🌐 امتداد ${tld} شائع في الهجمات`); }
+        else if (tld && !["com","org","net","edu","gov","io","co","uk","de","fr","ca","au","jp","br","us"].includes(tld) && !isTrustedExact) { score -= 4; reasons.push(`⚠️ امتداد غير مألوف (${tld})`); }
+        for (let kw of RISKY_KEYWORDS) {
+            if (hostname.includes(kw)) { score -= 12; reasons.push(`⚠️ كلمة "${kw}" في النطاق`); break; }
+        }
+        for (let bad of PATH_SUSPICIOUS) {
+            if (pathname.includes(bad)) { score -= 10; reasons.push(`📁 مسار يحتوي "${bad}"`); break; }
+        }
+        if (rawUrl.includes('@') && !rawUrl.includes('mailto:')) { score -= 28; reasons.push("🚨 رمز @ في الرابط - هجوم تصيد"); }
+        const freeGiftPattern = /(free|gift|prize|bonus|reward|winner|congratulations)/i;
+        if (freeGiftPattern.test(rawUrl) && !isTrustedExact) { score -= 12; reasons.push("🎁 كلمات جائزة/مجاني"); }
+        const fakeBrands = ["faceb00k", "paypa1", "micros0ft", "amaz0n", "app1e", "twitt3r", "goog1e"];
+        for (let fake of fakeBrands) {
+            if (hostname.includes(fake)) { score -= 30; reasons.push(`⚠️ نطاق يشبه علامة تجارية (${fake})`); break; }
+        }
+        if (isTrustedExact && score < 70 && protocol === "https:") { score = Math.max(70, score); reasons.push("✔️ نطاق موثوق مع عوامل ثانوية"); }
+        score = Math.min(100, Math.max(0, Math.floor(score)));
+        let finalStatus = "", verdict = "", statusColor = "";
+        if (score >= 70) { finalStatus = "آمن"; verdict = "آمن ✅"; statusColor = "#6fef9e"; }
+        else if (score >= 35) { finalStatus = "مشبوه"; verdict = "مشبوه ⚠️"; statusColor = "#ffcd4a"; }
+        else { finalStatus = "خطر"; verdict = "خطر ❌"; statusColor = "#ff6b6b"; }
+        let reasonSummary = reasons.slice(0, 3).join(" • ");
+        if (reasonSummary === "") reasonSummary = "تحليل متعدد المعايير";
+        return { score, verdict, finalStatus, statusColor, reasonSummary };
     }
 
-    // حركة الإبرة: من -90 (أحمر) إلى 90 (أخضر)
-    const finalAngle = (score / 100) * 180 - 90;
-    needle.style.transform = `rotate(${finalAngle}deg)`;
-
-    // تحديث الحالة والألوان
-    if(score > 70) {
-        statusText.innerText = "آمن ✅";
-        statusText.style.color = "#00ff88";
-    } else if(score < 40) {
-        statusText.innerText = "خطر ❌";
-        statusText.style.color = "#ff4444";
-    } else {
-        statusText.innerText = "مشبوه ⚠️";
-        statusText.style.color = "#ffcc00";
+    function performScan() {
+        const urlInput = document.getElementById('urlInput');
+        const rawUrl = urlInput.value.trim();
+        const needle = document.getElementById('needle');
+        const statusDiv = document.getElementById('statusResult');
+        const detailsSpan = document.getElementById('detailsHint');
+        if (!rawUrl) { alert("🦊 الرجاء إدخال رابط لفحصه"); return; }
+        statusDiv.innerHTML = "⏳ جاري التحليل...";
+        statusDiv.style.color = "#ffcd94";
+        setTimeout(() => {
+            const analysis = analyzeUrlSecurity(rawUrl);
+            const score = analysis.score;
+            let angle = (score / 100) * 180 - 90;
+            angle = Math.min(88, Math.max(-88, angle));
+            needle.style.transform = `rotate(${angle}deg)`;
+            statusDiv.innerHTML = analysis.verdict;
+            statusDiv.style.color = analysis.statusColor;
+            let extraMessage = "";
+            if (analysis.finalStatus === "آمن") extraMessage = `🛡️ درجة الأمان ${score}% · ${analysis.reasonSummary}`;
+            else if (analysis.finalStatus === "مشبوه") extraMessage = `⚠️ درجة الخطورة المعتدلة ${score}% · ${analysis.reasonSummary}`;
+            else extraMessage = `💀 تهديد عالي ${score}% · ${analysis.reasonSummary}`;
+            detailsSpan.innerHTML = `🔎 ${extraMessage}`;
+            if (analysis.finalStatus === "آمن") {
+                needle.style.background = "linear-gradient(180deg, #b3ffcf, #4eff8f)";
+                needle.style.boxShadow = "0 0 12px #3eff8e";
+            } else if (analysis.finalStatus === "خطر") {
+                needle.style.background = "linear-gradient(180deg, #ffaaaa, #ff4a4a)";
+                needle.style.boxShadow = "0 0 12px #ff3a3a";
+            } else {
+                needle.style.background = "linear-gradient(180deg, #ffdd99, #ffbc3c)";
+                needle.style.boxShadow = "0 0 10px #ffb347";
+            }
+        }, 60);
     }
-}
+    document.getElementById('urlInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') performScan(); });
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('needle').style.transform = `rotate(-90deg)`;
+        document.getElementById('statusResult').innerHTML = "✨ جاهز للفحص";
+        document.getElementById('statusResult').style.color = "#ffcd94";
+    });
 </script>
-
 </body>
-</html>
+    </html>
