@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Fox Scan Pro - التحليل الذكي للأمان (قائمة بيضاء شاملة)</title>
+    <title>Fox Scan Pro - التحليل الذكي للأمان (نسخة عالمية)</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -23,13 +23,13 @@
             padding: 28px 22px 35px;
             border-radius: 48px;
             box-shadow: 0 25px 45px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,106,0,0.25);
-            width: 380px;
+            width: 400px;
             max-width: 95%;
             text-align: center;
             border: 1px solid rgba(255,106,0,0.3);
         }
         h1 { color: #ff8c42; font-size: 28px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .sub { font-size: 13px; color: #9aa4bf; margin-bottom: 25px; border-bottom: 1px dashed #2a2f3f; display: inline-block; padding-bottom: 6px; }
+        .sub { font-size: 13px; color: #9aa4bf; margin-bottom: 20px; border-bottom: 1px dashed #2a2f3f; display: inline-block; padding-bottom: 6px; }
         input {
             width: 100%;
             padding: 14px 18px;
@@ -55,8 +55,10 @@
             box-shadow: 0 5px 12px rgba(255,106,0,0.3);
         }
         button:active { transform: scale(0.97); }
+        
+        /* مقياس القياس */
         .gauge-container {
-            margin: 25px auto 15px;
+            margin: 20px auto 10px;
             position: relative;
             width: 240px;
             height: 120px;
@@ -103,18 +105,20 @@
             box-shadow: 0 0 6px orange;
             border: 1px solid #ffb347;
         }
+        /* تكبير النصوص على المقياس (آمن، مشبوه، خطر) */
         .markers {
             display: flex;
             justify-content: space-between;
-            width: 240px;
+            width: 260px;
             margin: 8px auto 0;
-            font-size: 11px;
-            font-weight: bold;
-            color: #ccd6f0;
-            padding: 0 8px;
+            font-size: 16px;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 0 4px black;
+            padding: 0 5px;
         }
         .status {
-            margin-top: 18px;
+            margin-top: 16px;
             font-size: 26px;
             font-weight: 800;
             background: rgba(0,0,0,0.4);
@@ -122,12 +126,13 @@
             border-radius: 80px;
             backdrop-filter: blur(4px);
         }
+        /* تصغير "جاهز للفحص" */
         .extra-detail {
-            font-size: 12px;
-            margin-top: 14px;
+            font-size: 11px;
+            margin-top: 8px;
             color: #a0a9c2;
             background: #0b0e16b3;
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 32px;
             display: inline-block;
         }
@@ -138,6 +143,7 @@
             gap: 15px;
             margin-top: 15px;
             color: #8892b0;
+            flex-wrap: wrap;
         }
         footer { font-size: 10px; margin-top: 18px; opacity: 0.6; }
     </style>
@@ -165,75 +171,103 @@
     <div class="legend">
         <span>🔒 HTTPS</span> <span>🌐 نطاق موثوق</span> <span>🚫 كلمات خطيرة</span> <span>🧩 امتدادات مشبوهة</span>
     </div>
-    <footer>يدعم جميع المتاجر العالمية الكبرى والمواقع المشهورة</footer>
+    <footer>يدعم جميع المتاجر العالمية والمواقع العربية والألمانية ومنصات الأفلام والأنمي</footer>
 </div>
 
 <script>
     // ======================== القائمة البيضاء الموسعة جداً ========================
-    // تشمل متاجر ضخمة، خدمات تقنية، منصات تعليمية، إعلام، تواصل اجتماعي، بنوك، وغيرها
+    // تشمل: متاجر عالمية، مواقع عربية، ألمانية، منصات أفلام، أنمي، خدمات حكومية، تعليمية، إلخ.
     const TRUSTED_DOMAINS = new Set([
-        // محركات البحث وخدمات كبرى
+        // --- محركات البحث وخدمات كبرى عالمية ---
         "google.com", "youtube.com", "facebook.com", "twitter.com", "instagram.com", "linkedin.com",
         "microsoft.com", "apple.com", "amazon.com", "netflix.com", "spotify.com", "github.com",
         "wikipedia.org", "stackoverflow.com", "adobe.com", "oracle.com", "cloudflare.com",
         "whatsapp.com", "telegram.org", "zoom.us", "dropbox.com", "paypal.com", "stripe.com",
         "shopify.com", "wordpress.com", "medium.com", "bbc.com", "cnn.com", "mit.edu", "stanford.edu",
         
-        // متاجر الألعاب والتقنية
+        // --- متاجر الألعاب والتقنية العالمية ---
         "steampowered.com", "steamcommunity.com", "epicgames.com", "epicgames.dev", "unrealengine.com",
         "playstation.com", "xbox.com", "nintendo.com", "ea.com", "ubisoft.com", "rockstargames.com",
         "blizzard.com", "battle.net", "gog.com", "humblebundle.com", "origin.com", "cdkeys.com",
         "fanatical.com", "greenmangaming.com", "gamersgate.com", "indiegala.com", "itch.io",
         
-        // متاجر إلكترونية عالمية
+        // --- متاجر إلكترونية عالمية ---
         "ebay.com", "aliexpress.com", "walmart.com", "target.com", "bestbuy.com", "costco.com",
         "homedepot.com", "lowes.com", "etsy.com", "zalando.com", "asos.com", "alibaba.com",
         "newegg.com", "rakuten.com", "zillow.com", "wayfair.com", "chewy.com",
         
-        // خدمات سحابية وبرمجيات
-        "gitlab.com", "bitbucket.org", "docker.com", "kubernetes.io", "npmjs.com", "pypi.org",
-        "rubygems.org", "mongodb.com", "redis.io", "elastic.co", "datadog.com", "splunk.com",
+        // --- مواقع ألمانية شهيرة (ألمانيا) ---
+        "dw.com", "bild.de", "spiegel.de", "welt.de", "zeit.de", "faz.net", "sueddeutsche.de",
+        "tagesschau.de", "ard.de", "zdf.de", "prosieben.de", "sat1.de", "rtl.de", "vox.de",
+        "t-online.de", "web.de", "gmx.de", "aldi.de", "lidl.de", "dm.de", "rossmann.de",
+        "mediamarkt.de", "saturn.de", "otto.de", "zalando.de", "aboutyou.de", "check24.de",
+        "idealo.de", "ebay-kleinanzeigen.de", "immobilienscout24.de", "bahn.de", "lufthansa.com",
+        "dhl.de", "deutschepost.de", "telekom.de", "vodafone.de", "o2online.de", "1und1.de",
         
-        // منصات تعليمية
+        // --- مواقع عربية كبرى (الشرق الأوسط وشمال أفريقيا) ---
+        "alarabiya.net", "aljazeera.net", "cnn-arabic.com", "skynewsarabia.com", "bbc.com/arabic",
+        "roya.tv", "alghad.com", "addustour.com", "alaraby.co.uk", "elbalad.news", "youm7.com",
+        "ahram.org.eg", "almasryalyoum.com", "akhbarelyom.com", "sabq.org", "okaz.com.sa",
+        "alriyadh.com", "alwatan.com.sa", "elwatannews.com", "ennaharonline.com", "tunisienumerique.com",
+        "hespress.com", "le360.ma", "alarab.qa", "raya.com", "alraimedia.com", "alqabas.com",
+        "aljarida.com", "alanba.com.kw", "albiladpress.com", "akhbar-alkhaleej.com", "alayam.com",
+        "alshahid.net", "alhurra.com", "islamweb.net", "islamway.net", "alukah.net", "mawdoo3.com",
+        
+        // --- منصات مشاهدة الأفلام والمسلسلات (قانونية وآمنة) ---
+        "shahid.net", "shahid.mbc.net", "watchit.com", "osn.com", "netflix.com", "disneyplus.com",
+        "hbomax.com", "primevideo.com", "apple.com/apple-tv-plus", "hulu.com", "peacocktv.com",
+        "paramountplus.com", "mubi.com", "viki.com", "tubi.tv", "pluto.tv", "kanopy.com",
+        
+        // --- مواقع الأنمي الآمنة والقانونية ---
+        "crunchyroll.com", "funimation.com", "animenewsnetwork.com", "myanimelist.net",
+        "anilist.co", "livechart.me", "wakanim.tv", "hidive.com", "retrocrush.tv", "anime-planet.com",
+        
+        // --- منصات تعليمية عربية وعالمية ---
         "coursera.org", "edx.org", "udemy.com", "khanacademy.org", "udacity.com", "pluralsight.com",
-        "lynda.com", "skillshare.com", "codecademy.com", "harvard.edu", "oxford.ac.uk", "cambridge.org",
+        "nacaa.com", "edraak.org", "rwaq.org", "mahara-tech.com", "tahakom.com",
         
-        // إعلام وصحافة
+        // --- خدمات سحابية وبرمجيات ---
+        "gitlab.com", "bitbucket.org", "docker.com", "kubernetes.io", "npmjs.com", "pypi.org",
+        "mongodb.com", "redis.io", "elastic.co", "datadog.com", "splunk.com",
+        
+        // --- إعلام وصحافة عالمية وعربية ---
         "nytimes.com", "washingtonpost.com", "theguardian.com", "reuters.com", "bloomberg.com",
         "forbes.com", "techcrunch.com", "theverge.com", "wired.com", "arstechnica.com",
         
-        // شبكات اجتماعية وخدمات تواصل
+        // --- شبكات اجتماعية وخدمات تواصل ---
         "reddit.com", "tumblr.com", "snapchat.com", "tiktok.com", "discord.com", "slack.com",
         "teams.microsoft.com", "zoom.com", "skype.com", "whatsapp.net",
         
-        // خدمات تخزين سحابي
+        // --- خدمات تخزين سحابي ---
         "onedrive.live.com", "icloud.com", "drive.google.com", "box.com", "mega.nz",
         
-        // بنوك وخدمات مالية عالمية (أمثلة)
+        // --- بنوك وخدمات مالية عالمية وعربية ---
         "visa.com", "mastercard.com", "americanexpress.com", "chase.com", "bankofamerica.com",
         "wellsfargo.com", "citi.com", "hsbc.com", "capitalone.com", "paypalobjects.com",
+        "alrajhibank.com.sa", "riyadbank.com", "samba.com", "ncbc.com", "ahli.com", "enbd.com",
+        "adcb.com", "cibeg.com", "qnb.com", "kuwaitnationalbank.com",
         
-        // منصات بث وترفيه
-        "disneyplus.com", "hulu.com", "primevideo.com", "hbomax.com", "paramountplus.com",
-        "peacocktv.com", "twitch.tv", "tunein.com", "pandora.com", "deezer.com",
+        // --- منصات بث وترفيه ---
+        "twitch.tv", "tunein.com", "pandora.com", "deezer.com", "anghami.com",
         
-        // متاجر تطبيقات
+        // --- متاجر تطبيقات ---
         "play.google.com", "apps.apple.com", "apkmirror.com", "apkpure.com",
         
-        // خدمات سفر وفنادق
+        // --- خدمات سفر وفنادق ---
         "expedia.com", "booking.com", "agoda.com", "airbnb.com", "tripadvisor.com",
         
-        // مواقع حكومية وتعليمية عامة
-        "gov.uk", "usa.gov", "europa.eu", "un.org"
+        // --- مواقع حكومية وتعليمية عامة ---
+        "gov.uk", "usa.gov", "europa.eu", "un.org", "moi.gov.sa", "moe.gov.sa", "moh.gov.sa",
+        "gco.gov.sa", "cma.org.sa", "mcit.gov.sa", "mof.gov.sa"
     ]);
 
-    // النطاقات الخطيرة (امتدادات شائعة في التصيد)
+    // النطاقات الخطيرة (امتدادات شائعة في التصيد) - تظل كما هي
     const SUSPICIOUS_TLDS = new Set([
         "xyz", "top", "tk", "ml", "ga", "cf", "click", "loan", "gq", "men", "icu", "online", 
         "site", "website", "press", "work", "date", "download", "review", "trade", "bid"
     ]);
 
-    // كلمات مفتاحية خطيرة – لكن سنطبقها فقط إذا لم يكن النطاق ضمن القائمة البيضاء
+    // كلمات مفتاحية خطيرة – تطبق فقط إذا لم يكن النطاق ضمن القائمة البيضاء
     const RISKY_KEYWORDS = [
         "login", "verify", "secure", "account-update", "signin", "confirm", "banking", "wallet",
         "password-reset", "unlock", "security-check", "validate", "authenticate", "2fa",
@@ -315,7 +349,7 @@
             else if (dotCount >= 6) { score -= 14; reasons.push("⚠️ هيكل نطاق معقد"); }
         }
 
-        // 6. امتدادات مشبوهة (عقوبة معتدلة)
+        // 6. امتدادات مشبوهة
         const tld = hostname.split('.').pop();
         if (!trusted && SUSPICIOUS_TLDS.has(tld)) {
             score -= 12;
@@ -336,7 +370,7 @@
             }
         }
 
-        // 8. كلمات خطيرة في المسار (تأثير بسيط جداً على المواقع الموثوقة)
+        // 8. كلمات خطيرة في المسار
         let pathRisk = false;
         for (let bad of PATH_SUSPICIOUS) {
             if (pathname.includes(bad)) {
@@ -352,20 +386,20 @@
             }
         }
 
-        // 9. رمز @ في الرابط (خطر كبير دائماً)
+        // 9. رمز @ في الرابط (خطر كبير)
         if (rawUrl.includes('@') && !rawUrl.includes('mailto:')) {
             score -= 28;
-            reasons.push("🚨 رمز @ في الرابط - هجوم تصيد كلاسيكي");
+            reasons.push("🚨 رمز @ في الرابط - هجوم تصيد");
         }
 
-        // 10. كلمات مجانية / جوائز (فقط للمواقع غير الموثوقة)
+        // 10. كلمات مجانية / جوائز (للمواقع غير الموثوقة)
         const freeGiftPattern = /(free|gift|prize|bonus|reward|winner|congratulations)/i;
         if (!trusted && freeGiftPattern.test(rawUrl)) {
             score -= 12;
             reasons.push("🎁 كلمات جائزة/مجاني - غالباً احتيال");
         }
 
-        // 11. انتحال العلامات التجارية (مثل paypa1)
+        // 11. انتحال العلامات التجارية
         const fakeBrands = ["faceb00k", "paypa1", "micros0ft", "amaz0n", "app1e", "twitt3r", "goog1e", "steamcommunitty"];
         for (let fake of fakeBrands) {
             if (hostname.includes(fake)) {
@@ -449,4 +483,4 @@
     });
 </script>
 </body>
-    </html>
+</html>
